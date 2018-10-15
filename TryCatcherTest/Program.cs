@@ -12,6 +12,11 @@ namespace TryCatcherTest
                 Console.WriteLine(staticFunctionTest.Value);
 
 
+            TryCatcher.RunMethod(() =>
+                StaticMethod("Value from a method call.")
+            );
+
+
             var o = new MyTestClass();
             o.RunNonStatic();
 
@@ -56,12 +61,11 @@ namespace TryCatcherTest
             Action errorFunction = () =>
             {
                 Console.WriteLine("Attempting to cause exception.");
-                var err = 0;
-                var xx = 2 / err;
+                throw new Exception("I've caused an exception!");
             };
 
             TryCatcher.RunMethod(errorFunction);
-            TryCatcher.Logger = new TestLogger();
+            TryCatcher.RegisterLogger(new TestLogger());
             TryCatcher.RunMethod(errorFunction);
 
 
@@ -72,6 +76,11 @@ namespace TryCatcherTest
         public static String StaticFunction(String param)
         {
             return param;
+        }
+
+        public static void StaticMethod(String msg)
+        {
+            Console.WriteLine(msg);
         }
 
         public class MyTestClass
